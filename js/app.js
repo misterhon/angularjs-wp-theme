@@ -17,6 +17,25 @@ wpa.config( function( $routeProvider, $locationProvider ) {
 			controller: 'Post'
 		});
 });
+
+wpa.directive('wpaSearchForm', function(){
+	return {
+		restrict: 'EA',
+		template: 'Search Keyword: <input type="text" name="s" ng-model="filter.s" ng-change="search()">',
+		controller: function ( $scope, $http ) {
+			$scope.filter = {
+				s: ''
+			};
+			$scope.search = function() {
+				if ( $scope.filter.s.length >= 5 ) {
+					$http.get('wp-json/posts/?filter[s]=' + $scope.filter.s).success(function(res){
+						$scope.posts = res;
+					});
+				}
+			};
+		}
+	};
+});
 	
 wpa.controller('Main', ['$http', '$scope', function( $http, $scope ) {
 	$http.get('/wp-json/posts/').success(function(res){
