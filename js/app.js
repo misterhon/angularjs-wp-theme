@@ -17,6 +17,24 @@ wpa.config( function( $routeProvider, $locationProvider ) {
 			controller: 'Post'
 		});
 });
+	
+wpa.controller('Main', ['$http', '$scope', function( $http, $scope ) {
+	$http.get('/wp-json/wp/v2/posts/').success(function(res){
+		$scope.posts = res;
+	});
+}]);
+
+wpa.controller('Page', ['$http', '$scope', '$routeParams', function( $http, $scope, $routeParams ) {
+	$http.get('/wp-json/wp/v2/pages/?filter[name]=' + $routeParams.slug).success(function(res){
+		$scope.post = res[0];
+	});
+}]);
+
+wpa.controller('Post', ['$http', '$scope', '$routeParams', function( $http, $scope, $routeParams ) {
+	$http.get('/wp-json/wp/v2/posts/?filter[name]=' + $routeParams.slug).success(function(res){
+		$scope.post = res[0];
+	});
+}]);
 
 wpa.directive('wpaSearchForm', function(){
 	return {
@@ -28,7 +46,7 @@ wpa.directive('wpaSearchForm', function(){
 			};
 			$scope.search = function() {
 				if ( $scope.filter.s.length >= 5 ) {
-					$http.get('wp-json/posts/?filter[s]=' + $scope.filter.s).success(function(res){
+					$http.get('wp-json/wp/v2/posts/?filter[s]=' + $scope.filter.s).success(function(res){
 						$scope.posts = res;
 					});
 				}
@@ -36,21 +54,3 @@ wpa.directive('wpaSearchForm', function(){
 		}
 	};
 });
-	
-wpa.controller('Main', ['$http', '$scope', function( $http, $scope ) {
-	$http.get('/wp-json/posts/').success(function(res){
-		$scope.posts = res;
-	});
-}]);
-
-wpa.controller('Page', ['$http', '$scope', '$routeParams', function( $http, $scope, $routeParams ) {
-	$http.get('/wp-json/pages/?filter[name]=' + $routeParams.slug).success(function(res){
-		$scope.post = res[0];
-	});
-}]);
-
-wpa.controller('Post', ['$http', '$scope', '$routeParams', function( $http, $scope, $routeParams ) {
-	$http.get('/wp-json/posts/?filter[name]=' + $routeParams.slug).success(function(res){
-		$scope.post = res[0];
-	});
-}]);

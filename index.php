@@ -11,7 +11,6 @@
 <header>
 	<h1>Alex Hon</h1>
 	<h2>Developer, Mecha Enthusiast</h2>
-	<wpa-search-form></wpa-search-form>
 </header>
 
 <div ng-view></div>
